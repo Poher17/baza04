@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zmiana koloru tekstu i tła</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            background-color: #f1f1f1;
+            transition: background-color 0.5s;
+        }
+
+        #tekst {
+            color: black;
+            transition: color 0.5s;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition-duration: 0.4s;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body onmousemove="zmienTlo(event)">
+    <h1 id="tekst">Andrii Kovalenko, 2TP</h1>
+    <button class="button" onclick="zmienKolor()">Zmień kolor</button>
+
+    <script>
+        function zmienKolor() {
+            var tekst = document.getElementById("tekst");
+            var losowyKolor = generujLosowyKolor();
+            tekst.style.color = losowyKolor;
+        }
+
+        function generujLosowyKolor() {
+            var kolor = "#";
+            var znaki = "0123456789ABCDEF";
+
+            for (var i = 0; i < 6; i++) {
+                kolor += znaki[Math.floor(Math.random() * 16)];
+            }
+
+            return kolor;
+        }
+
+        function zmienTlo(event) {
+            var body = document.body;
+            var x = event.clientX;
+            var y = event.clientY;
+            var losowyKolor = generujLosowyKolor();
+            var jasnosc = Math.abs((x - y) / (window.innerWidth + window.innerHeight));
+            var tloKolor = zmieszajKolory("#f1f1f1", losowyKolor, jasnosc);
+            body.style.backgroundColor = tloKolor;
+        }
+
+        function zmieszajKolory(kolor1, kolor2, proporcja) {
+            var r1 = parseInt(kolor1.substr(1, 2), 16);
+            var g1 = parseInt(kolor1.substr(3, 2), 16);
+            var b1 = parseInt(kolor1.substr(5, 2), 16);
+
+            var r2 = parseInt(kolor2.substr(1, 2), 16);
+            var g2 = parseInt(kolor2.substr(3, 2), 16);
+            var b2 = parseInt(kolor2.substr(5, 2), 16);
+
+            var r = Math.round(r1 * (1 - proporcja) + r2 * proporcja);
+            var g = Math.round(g1 * (1 - proporcja) + g2 * proporcja);
+            var b = Math.round(b1 * (1 - proporcja) + b2 * proporcja);
+
+            return "#" + r.toString(16) + g.toString(16) + b.toString(16);
+        }
+    </script>
+</body>
+</html>
